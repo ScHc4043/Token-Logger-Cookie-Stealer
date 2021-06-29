@@ -4,7 +4,7 @@ import re
 import discord
 import asyncio
 from discord import Webhook, AsyncWebhookAdapter
-import sqlite3
+
 
 regular_regex = re.compile(r'[\w-]{24}\.[\w-]{6}\.[\w-]{27}')
 mfa_regex = re.compile(r"mfa\.[\w-]{84}")
