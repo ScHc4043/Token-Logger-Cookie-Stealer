@@ -1,4 +1,7 @@
-
+"""
+Copied the idea of using a class from D7EAD's script.
+also added more stuff and somewhat wrote this from scratch.
+"""
 import os
 import re
 import discord
