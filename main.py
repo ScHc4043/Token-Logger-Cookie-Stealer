@@ -1,6 +1,8 @@
 """
 Copied the idea of using a class from D7EAD's script.
 also added more stuff and somewhat wrote this from scratch.
+
+TODO: Make send func look less ugly, made it at 2am
 """
 import os
 import re
